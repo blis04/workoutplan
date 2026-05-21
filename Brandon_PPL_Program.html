@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brandon's 16-Week PPL Program</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0e0e10;
+    --surface: #18181b;
+    --surface2: #222226;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #f0f0f2;
+    --muted: #8a8a96;
+    --dim: #55555f;
+    --push: #e94560;
+    --pull: #0fb5a0;
+    --legs: #7c5cbf;
+    --rest: #5a5a6a;
+    --accent: #f5a623;
+    --block1: #27ae60;
+    --block2: #2980b9;
+    --deload: #e67e22;
+    --radius: 14px;
+    --radius-sm: 9px;
+  }
+
+  html { font-size: 15px; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  .app-header {
+    padding: 28px 24px 0;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+  .app-title {
+    font-size: clamp(22px, 5vw, 30px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    line-height: 1.1;
+  }
+  .app-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 5px;
+    font-weight: 400;
+  }
+
+  /* ── STAT CARDS ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 10px;
+    padding: 20px 24px 0;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .stat-val {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  /* ── MAIN CONTENT ── */
+  .main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 20px 24px 60px;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .tab {
+    padding: 8px 16px;
+    border: 1px solid var(--border2);
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--muted);
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
+  .tab.active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+
+  /* ── SECTIONS ── */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* ── WEEK NAV ── */
+  .week-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .week-nav button {
+    padding: 7px 14px;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    background: var(--surface);
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .week-nav button:hover { color: var(--text); border-color: var(--border2); }
+  .week-nav button:disabled { opacity: 0.3; cursor: default; }
+  .week-center { flex: 1; text-align: center; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .week-label { font-size: 15px; font-weight: 600; color: var(--text); }
+  .block-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 11px;
+    border-radius: 50px;
+    letter-spacing: 0.02em;
+  }
+  .badge-b1 { background: rgba(39,174,96,0.18); color: #4cd964; border: 1px solid rgba(39,174,96,0.3); }
+  .badge-b2 { background: rgba(41,128,185,0.18); color: #5dade2; border: 1px solid rgba(41,128,185,0.3); }
+  .badge-dl { background: rgba(230,126,34,0.18); color: #f0a040; border: 1px solid rgba(230,126,34,0.3); }
+
+  /* ── WEEK NOTE ── */
+  .week-note {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 16px;
+  }
+  .week-note b { color: var(--text); font-weight: 600; }
+
+  /* ── DAY CARDS ── */
+  .day-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .day-card:hover { border-color: var(--border2); }
+  .day-card.done { border-color: rgba(39,174,96,0.4); }
+  .day-card.done .day-header { background: rgba(39,174,96,0.04); }
+
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 18px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.12s;
+  }
+  .day-header:hover { background: var(--surface2); }
+
+  .day-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 11px;
+    border-radius: 50px;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+  .push-badge { background: rgba(233,69,96,0.18); color: #ff6b84; border: 1px solid rgba(233,69,96,0.3); }
+  .pull-badge { background: rgba(15,181,160,0.18); color: #1dd9bf; border: 1px solid rgba(15,181,160,0.3); }
+  .legs-badge { background: rgba(124,92,191,0.18); color: #a47de8; border: 1px solid rgba(124,92,191,0.3); }
+  .rest-badge { background: rgba(90,90,106,0.25); color: var(--muted); border: 1px solid rgba(90,90,106,0.3); }
+
+  .day-name { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; }
+  .day-meta { font-size: 12px; color: var(--dim); }
+
+  .day-check {
+    width: 20px; height: 20px;
+    border: 1.5px solid var(--dim);
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .day-check:hover { border-color: var(--block1); }
+  .day-check.checked { background: var(--block1); border-color: var(--block1); }
+  .day-check.checked::after { content: '✓'; font-size: 12px; color: white; font-weight: 700; }
+
+  .chevron {
+    color: var(--dim);
+    font-size: 11px;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+  .chevron.open { transform: rotate(180deg); }
+
+  /* ── DAY BODY ── */
+  .day-body { display: none; border-top: 1px solid var(--border); }
+  .day-body.open { display: block; }
+
+  .warmup-bar {
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 18px;
+    font-size: 12px;
+    color: var(--dim);
+    line-height: 1.5;
+  }
+  .warmup-bar span { color: var(--muted); font-weight: 500; margin-right: 6px; }
+
+  /* ── EXERCISE TABLE ── */
+  .ex-table { width: 100%; border-collapse: collapse; }
+  .ex-table thead tr { border-bottom: 1px solid var(--border); }
+  .ex-table th {
+    padding: 9px 18px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--dim);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    white-space: nowrap;
+  }
+  .ex-table td {
+    padding: 11px 18px;
+    font-size: 13px;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  .ex-table tr:last-child td { border-bottom: none; }
+  .ex-table tr:hover td { background: var(--surface2); }
+
+  .ex-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+    width: 28px;
+  }
+  .ex-name { font-weight: 500; }
+  .ex-sets, .ex-reps { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--muted); text-align: center; }
+  .ex-load { font-size: 12px; color: var(--muted); }
+  .rpe-chip {
+    display: inline-block;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--surface2);
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .ex-rest { font-size: 12px; color: var(--dim); white-space: nowrap; }
+  .ex-note { font-size: 11.5px; color: var(--dim); max-width: 220px; line-height: 1.45; }
+
+  /* ── SECOND WORKOUT ── */
+  .second-workout {
+    background: rgba(255,255,255,0.03);
+    border-top: 1px solid var(--border);
+    padding: 12px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .second-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    padding-top: 1px;
+  }
+  .second-text { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+  /* ── REST DAY ── */
+  .rest-body {
+    padding: 24px 18px;
+    text-align: center;
+    color: var(--dim);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .rest-body strong { color: var(--muted); }
+
+  /* ── INFO TABS CONTENT ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .info-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+  }
+  .info-card-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .info-item {
+    font-size: 12.5px;
+    color: var(--muted);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.5;
+  }
+  .info-item:last-child { border-bottom: none; }
+  .info-item strong { color: var(--text); }
+
+  .prog-note {
+    background: var(--surface);
+    border-left: 3px solid var(--border2);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+    border-top: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .prog-note b { color: var(--text); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 4px; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 500px) {
+    .app-header, .main { padding-left: 16px; padding-right: 16px; }
+    .stats { padding-left: 16px; padding-right: 16px; }
+    .ex-note, .ex-load { display: none; }
+    .stat-val { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="app-title">Brandon's 16-week PPL program</div>
+  <div class="app-sub">Intermediate-advanced push / pull / legs · Boulder, CO · 75 Hard integrated</div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-label">Duration</div><div class="stat-val">16 wks</div></div>
+  <div class="stat"><div class="stat-label">Training days</div><div class="stat-val">6 / wk</div></div>
+  <div class="stat"><div class="stat-label">Daily workouts</div><div class="stat-val">2x</div></div>
+  <div class="stat"><div class="stat-label">Blocks</div><div class="stat-val">2 × 8wk</div></div>
+  <div class="stat"><div class="stat-label">Deload</div><div class="stat-val">Wk 9</div></div>
+</div>
+
+<div class="main">
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('schedule',this)">Weekly schedule</div>
+    <div class="tab" onclick="switchTab('progression',this)">Progression & RPE</div>
+    <div class="tab" onclick="switchTab('warmup',this)">Warmup protocol</div>
+    <div class="tab" onclick="switchTab('nutrition',this)">Nutrition & supps</div>
+    <div class="tab" onclick="switchTab('weights',this)">Starting weights</div>
+  </div>
+
+  <!-- SCHEDULE TAB -->
+  <div id="schedule" class="section active">
+    <div class="week-nav">
+      <button id="btn-prev" onclick="changeWeek(-1)">← prev</button>
+      <div class="week-center">
+        <span class="week-label" id="wk-label">Week 1</span>
+        <span class="block-badge badge-b1" id="blk-badge">Block 1 — build</span>
+      </div>
+      <button id="btn-next" onclick="changeWeek(1)">next →</button>
+    </div>
+    <div class="week-note" id="wk-note"></div>
+    <div id="day-grid"></div>
+  </div>
+
+  <!-- PROGRESSION TAB -->
+  <div id="progression" class="section">
+    <div class="prog-note"><b>Block 1 (weeks 1–8):</b> Volume-focused. RPE 7–8 on main lifts. Add 5 lbs/week to bench, 5–10 lbs/week to squat and deadlift. Do not ego lift in weeks 1–3 — this is intentional. Building work capacity and re-establishing movement patterns after detraining.</div>
+    <div class="prog-note"><b>Deload (week 9):</b> Drop all working weights by 40%. Cut total sets by half. Same exercises, same rest periods — just lighter and fewer sets. You will feel ready to train heavy. Resist it. This is where gains are locked in.</div>
+    <div class="prog-note"><b>Block 2 (weeks 10–16):</b> Intensity-focused. RPE 8–9 on main lifts. Volume drops slightly but weight increases significantly. Training closer to failure. Only add weight if the previous week felt at or below RPE 8.</div>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">RPE scale</div>
+        <div class="info-item"><strong>RPE 6</strong> — could do 4+ more reps</div>
+        <div class="info-item"><strong>RPE 7</strong> — could do 3 more reps</div>
+        <div class="info-item"><strong>RPE 8</strong> — could do 2 more reps</div>
+        <div class="info-item"><strong>RPE 9</strong> — could do 1 more rep</div>
+        <div class="info-item"><strong>RPE 10</strong> — true failure</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Load progression</div>
+        <div class="info-item">Bench: <strong>+5 lbs / week</strong> (Block 1)</div>
+        <div class="info-item">Squat: <strong>+5–10 lbs / week</strong> (Block 1)</div>
+        <div class="info-item">Deadlift: <strong>+5–10 lbs / week</strong> (Block 1)</div>
+        <div class="info-item">Accessories: <strong>+2.5–5 lbs</strong> per week</div>
+        <div class="info-item">Block 2: add weight only when RPE ≤ 8</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Rest intervals</div>
+        <div class="info-item">Main compounds: <strong>3–4 min</strong></div>
+        <div class="info-item">Secondary compounds: <strong>2–3 min</strong></div>
+        <div class="info-item">Accessories / isolation: <strong>60–90 sec</strong></div>
+        <div class="info-item">Block 2 top sets: up to <strong>5 min</strong></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Volume targets (sets/muscle/wk)</div>
+        <div class="info-item">Block 1: <strong>14–16 sets</strong> per muscle group</div>
+        <div class="info-item">Deload: <strong>6–8 sets</strong> per muscle group</div>
+        <div class="info-item">Block 2: <strong>12–14 sets</strong> (heavier, near failure)</div>
+        <div class="info-item">Based on Kraemer & Ratamess, Schoenfeld 2018</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WARMUP TAB -->
+  <div id="warmup" class="section">
+    <div class="prog-note"><b>General warmup (5 min before every session):</b> 5 min stationary bike at easy pace to raise core temp and lubricate joints. Not optional — your connective tissue needs it especially on leg days and after cold mornings at Boulder altitude.</div>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">Push day warmup</div>
+        <div class="info-item">Band pull-aparts: 2×20</div>
+        <div class="info-item">Wall slides: 2×10</div>
+        <div class="info-item">Empty bar bench: 2×10</div>
+        <div class="info-item">50% working weight: 1×8</div>
+        <div class="info-item">75% working weight: 1×4</div>
+        <div class="info-item">Then begin working sets</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Pull day warmup</div>
+        <div class="info-item">Cat-cow: 10 reps</div>
+        <div class="info-item">Dead hangs: 3×20 sec</div>
+        <div class="info-item">Band face pulls: 2×15</div>
+        <div class="info-item">Light lat pulldown: 1×12 at 50%</div>
+        <div class="info-item">Then begin working sets</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Leg day warmup</div>
+        <div class="info-item">Hip circles: 10 each direction</div>
+        <div class="info-item">Leg swings: 10 each leg</div>
+        <div class="info-item">BW squat: 2×15 controlled</div>
+        <div class="info-item">Empty bar squat: 2×8</div>
+        <div class="info-item">50% working weight: 1×6</div>
+        <div class="info-item">75% working weight: 1×3</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Shoulder note (swimmer history)</div>
+        <div class="info-item">Always do band pull-aparts before pushing</div>
+        <div class="info-item">No overhead barbell press — use landmine or DB</div>
+        <div class="info-item">If shoulder aches on bench: widen grip slightly</div>
+        <div class="info-item">Face pulls are non-negotiable on push days</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NUTRITION TAB -->
+  <div id="nutrition" class="section">
+    <div class="prog-note"><b>Daily protein target:</b> 155–175g. At 155 lbs building muscle with 2x/day training, this is the floor. Your smoothie should be 40–50g alone. Track loosely for the first 2 weeks so you know where you actually stand.</div>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">Creatine</div>
+        <div class="info-item">5g daily — no loading phase needed</div>
+        <div class="info-item">Take any time, consistency matters most</div>
+        <div class="info-item">Expect +3–5 lbs water weight weeks 2–3</div>
+        <div class="info-item">Strength bump noticeable weeks 2–3</div>
+        <div class="info-item">Takes 4–6 weeks to fully saturate</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Magnesium glycinate</div>
+        <div class="info-item">200–400mg before bed at night</div>
+        <div class="info-item">Improves sleep quality and recovery</div>
+        <div class="info-item">Avoid magnesium oxide — poor absorption</div>
+        <div class="info-item">Most impactful supplement for recovery</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Omega-3</div>
+        <div class="info-item">2–3g EPA+DHA combined daily</div>
+        <div class="info-item">Take with a fat-containing meal</div>
+        <div class="info-item">Reduces inflammation from high volume</div>
+        <div class="info-item">Critical during Block 2 intensity weeks</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Water (75 Hard)</div>
+        <div class="info-item">1 gallon daily minimum</div>
+        <div class="info-item">Boulder altitude = need more than sea level</div>
+        <div class="info-item">Add electrolytes on trail run days</div>
+        <div class="info-item">16oz immediately on waking every morning</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Calorie target</div>
+        <div class="info-item">200–300 cal surplus daily</div>
+        <div class="info-item">Leg days: more carbs (rice, sweet potato)</div>
+        <div class="info-item">Trail run days: +300–400 cal from carbs</div>
+        <div class="info-item">Do NOT cut on this program — you will stall</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Workout timing</div>
+        <div class="info-item">Pre-lift: carbs + protein 60–90 min before</div>
+        <div class="info-item">Post-lift: protein within 30–60 min after</div>
+        <div class="info-item">Before trail run: light carbs only, no heavy fat</div>
+        <div class="info-item">After 2nd workout: full meal or smoothie</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STARTING WEIGHTS TAB -->
+  <div id="weights" class="section">
+    <div class="prog-note"><b>Starting weights for week 1:</b> Based on your March numbers adjusted for ~8 weeks of detraining. Creatine and neural re-adaptation will bring them back fast — expect to hit or exceed March numbers by week 4–5.</div>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-title">Bench press</div>
+        <div class="info-item">March 1RM: <strong>145 lbs</strong></div>
+        <div class="info-item">Week 1 working weight: <strong>115–120 lbs</strong></div>
+        <div class="info-item">Sets/reps: 4×8 at RPE 7</div>
+        <div class="info-item">Weekly increase: +5 lbs</div>
+        <div class="info-item">Target by week 8: ~150–155 lbs for sets</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Back squat</div>
+        <div class="info-item">March 1RM: <strong>200 lbs</strong></div>
+        <div class="info-item">Week 1 working weight: <strong>155–165 lbs</strong></div>
+        <div class="info-item">Sets/reps: 4×6 at RPE 7</div>
+        <div class="info-item">Weekly increase: +5–10 lbs</div>
+        <div class="info-item">Target by week 8: ~195–205 lbs for sets</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Deadlift</div>
+        <div class="info-item">March 1RM: <strong>275 lbs</strong></div>
+        <div class="info-item">Week 1 working weight: <strong>215–225 lbs</strong></div>
+        <div class="info-item">Sets/reps: 3×5 at RPE 7</div>
+        <div class="info-item">Weekly increase: +5–10 lbs</div>
+        <div class="info-item">Target by week 8: ~260–270 lbs for sets</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">DB row (each hand)</div>
+        <div class="info-item">March working weight: <strong>65 lbs</strong></div>
+        <div class="info-item">Week 1 working weight: <strong>55 lbs</strong></div>
+        <div class="info-item">Sets/reps: 4×10 at RPE 7</div>
+        <div class="info-item">Weekly increase: +2.5–5 lbs</div>
+        <div class="info-item">Target by week 8: 65–70 lbs for sets</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Landmine / DB shoulder press</div>
+        <div class="info-item">No baseline — starting fresh</div>
+        <div class="info-item">Week 1: find comfortable 3×12 weight</div>
+        <div class="info-item">Priority is shoulder health over load</div>
+        <div class="info-item">Landmine preferred — swimmer-friendly angle</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title">Block 2 targets (week 16)</div>
+        <div class="info-item">Bench: <strong>160–170 lbs</strong> working sets</div>
+        <div class="info-item">Squat: <strong>215–225 lbs</strong> working sets</div>
+        <div class="info-item">Deadlift: <strong>285–295 lbs</strong> working sets</div>
+        <div class="info-item">DB row: <strong>70–80 lbs</strong> working sets</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const WEEKS = {
+  1:  { badge:'badge-b1', label:'Block 1 — build',      note:'<b>Week 1 — Technical reset.</b> Every set stays at RPE 7 maximum. Focus on re-grooving movement patterns. You will feel like you can do more — do not. Creatine loading begins now. Start your trail runs easy; Boulder altitude will feel different than sea level.' },
+  2:  { badge:'badge-b1', label:'Block 1 — build',      note:'<b>Week 2 — First load increase.</b> Add 5 lbs to bench, 5–10 lbs to squat and deadlift. Creatine starts kicking in. You may notice strength feeling better than expected — that is normal. Keep RPE at 7–8.' },
+  3:  { badge:'badge-b1', label:'Block 1 — build',      note:'<b>Week 3 — Volume drive.</b> Maintain load increases. If soreness is excessive on legs, keep trail run on pull days only this week. Hydration at altitude is critical — drink more than you think you need.' },
+  4:  { badge:'badge-b1', label:'Block 1 — build',      note:'<b>Week 4 — Benchmark check.</b> By now you should be at or near your March numbers. Creatine is fully loaded. Assess how trail runs feel at elevation — if handling them well, begin pushing pace slightly.' },
+  5:  { badge:'badge-b1', label:'Block 1 — build',      note:'<b>Week 5 — Strength phase begins within Block 1.</b> Main compound lifts now push toward RPE 8. Accessories stay at RPE 7. This week is where real strength adaptation starts layering on top of the volume base.' },
+  6:  { badge:'badge-b1', label:'Block 1 — build',      note:'<b>Week 6 — Peak volume week of Block 1.</b> This will be the hardest week so far. Prioritize sleep and protein. If something feels genuinely wrong (not just hard) back off — soreness is fine, pain is not.' },
+  7:  { badge:'badge-b1', label:'Block 1 — build',      note:'<b>Week 7 — Volume maintained, intensity increasing.</b> Do not reduce load this week. Your body is adapting. The deload is coming — push through intentionally so the recovery is meaningful.' },
+  8:  { badge:'badge-b1', label:'Block 1 — build',      note:'<b>Week 8 — Final week of Block 1.</b> Last heavy week before deload. Hit everything with intention. Record your working weights — they are your baseline for Block 2 loading.' },
+  9:  { badge:'badge-dl', label:'Deload',                note:'<b>Week 9 — Deload.</b> Drop all working weights by 40%. Cut total sets by half. Same exercises, same rest. You will feel like you are barely working — that is the point. 2nd workout this week = easy biking or a casual hike ONLY. No running.' },
+  10: { badge:'badge-b2', label:'Block 2 — intensity',  note:'<b>Week 10 — Block 2 begins.</b> Volume drops slightly, intensity increases significantly. RPE 8–9 on main lifts. Add 5–10% to your pre-deload Block 1 weights. Your body should feel fully recovered and strong.' },
+  11: { badge:'badge-b2', label:'Block 2 — intensity',  note:'<b>Week 11 — Heavier compounds.</b> Add weight if last week felt RPE 8. Rest intervals on main lifts can extend to 4–5 min if needed. Quality over quantity — every rep should be intentional.' },
+  12: { badge:'badge-b2', label:'Block 2 — intensity',  note:'<b>Week 12 — Mid-block intensity peak.</b> You should be hitting numbers you have never hit before on some lifts. Trail runs this week at moderate effort. Your cardio base from Block 1 is showing up in recovery capacity.' },
+  13: { badge:'badge-b2', label:'Block 2 — intensity',  note:'<b>Week 13 — Strength consolidation.</b> Maintain Block 2 intensity. If any lift stalls for 2 weeks straight, hold the weight rather than adding. This is normal — not every lift peaks at the same time.' },
+  14: { badge:'badge-b2', label:'Block 2 — intensity',  note:'<b>Week 14 — Approaching program peak.</b> RPE 9 acceptable on top sets of main lifts. Sleep is critical these last 3 weeks. Performance on final weeks depends heavily on recovery quality.' },
+  15: { badge:'badge-b2', label:'Block 2 — intensity',  note:'<b>Week 15 — Final push.</b> Last full-volume week. Hit every session with the same structure. After this week, you should know your new working maxes — use them to build the next program phase.' },
+  16: { badge:'badge-b2', label:'Block 2 — intensity',  note:'<b>Week 16 — Program finale.</b> Attempt true 1RM or near-1RM on bench, squat, and deadlift to benchmark progress. Celebrate the numbers — you followed a periodized science-based program for 4 months.' },
+};
+
+const DAYS_B1 = [
+  { day:'Monday',    type:'push', badge:'Push A',         badgeClass:'push-badge', exercises: 6,
+    second:'Stationary bike — 30-45 min zone 2 (HR 130-150, conversational pace)',
+    warmup:'5 min bike → Band pull-aparts 2×20 → Wall slides 2×10 → Empty bar bench 2×10 → 50% ×8 → 75% ×4',
+    exList:[
+      ['Barbell Bench Press','4','8','~115-120 lbs','7','3 min','Primary lift. 2-sec eccentric. Retract scapulae.'],
+      ['Incline DB Press','3','10','Moderate','7','2 min','Upper chest. Shoulders packed down and back.'],
+      ['Landmine Press','3','12','Comfortable','7','90 sec','Swimmer-friendly OHP. Find comfort weight wk 1.'],
+      ['Cable Lateral Raise','3','15','Light','7','60 sec','Strict form. Lead with elbow. No swinging.'],
+      ['Tricep Rope Pushdown','3','12','Moderate','7','60 sec','Full extension at bottom. Squeeze hard.'],
+      ['Overhead Tricep Extension','2','15','Light','7','60 sec','Long head focus. Elbows pinned. Slow ECC.'],
+    ]},
+  { day:'Tuesday',   type:'pull', badge:'Pull A',         badgeClass:'pull-badge', exercises: 6,
+    second:'Trail run or road run — 25-40 min easy to moderate. Boulder elevation is working for you.',
+    warmup:'5 min bike → Cat-cow 10 reps → Dead hangs 3×20 sec → Band face pulls 2×15 → Light lat pulldown 1×12',
+    exList:[
+      ['Barbell Deadlift','3','5','~215-225 lbs','7','4 min','Primary lift. Brace hard. Drive the floor away.'],
+      ['DB Row (each arm)','4','10','~55 lbs','7','90 sec','Full ROM. Let shoulder protract at bottom.'],
+      ['Lat Pulldown (wide)','3','10','Moderate','7','2 min','Initiate with lats not biceps. Slight lean back.'],
+      ['Seated Cable Row','3','12','Moderate','7','90 sec','Squeeze scapulae together at peak.'],
+      ['Face Pull (cable)','3','15','Light','6-7','60 sec','MANDATORY shoulder health. External rotation at end.'],
+      ['DB Hammer Curl','3','12','Moderate','7','60 sec','Neutral grip. Targets brachialis and brachioradialis.'],
+    ]},
+  { day:'Wednesday', type:'legs', badge:'Legs A',         badgeClass:'legs-badge', exercises: 6,
+    second:'Stationary bike — 20-30 min easy ONLY. Keep HR under 130. Legs just worked.',
+    warmup:'5 min bike → Hip circles 10 each → Leg swings 10/leg → BW squat 2×15 → Empty bar squat 2×8 → 50% ×6 → 75% ×3',
+    exList:[
+      ['Back Squat','4','6','~155-165 lbs','7','3-4 min','Primary lift. Hit depth every rep. Knees track toes.'],
+      ['Romanian Deadlift','3','10','~135 lbs','7','2-3 min','Hamstring stretch at bottom. Hip hinge pattern.'],
+      ['Leg Press','3','12','Moderate','7','2 min','Feet shoulder-width. Don\'t lock knees at top.'],
+      ['Walking Lunge (DB)','3','10/leg','Light-moderate','7','90 sec','Long stride. Front shin vertical. Rear knee near floor.'],
+      ['Leg Curl (machine)','3','12','Moderate','7','90 sec','Full ROM. Pause and squeeze at peak.'],
+      ['Calf Raise','4','15','Moderate','7','60 sec','All the way up AND down. Slow eccentric.'],
+    ]},
+  { day:'Thursday',  type:'push', badge:'Push B',         badgeClass:'push-badge', exercises: 6,
+    second:'Stationary bike — 30-45 min zone 2. Good day for a longer ride.',
+    warmup:'5 min bike → Band pull-aparts 2×20 → Wall slides 2×10 → Empty bar bench 2×10 → 50% ×8 → 75% ×4',
+    exList:[
+      ['Barbell Bench Press','4','8','+5 lbs vs Mon','7-8','3 min','+5 lbs heavier than Monday. RPE 8 is fine.'],
+      ['DB Shoulder Press (seated)','3','10','Moderate','7','2 min','DBs protect shoulder more than bar. Control descent.'],
+      ['Cable Fly (low to high)','3','15','Light','7','60 sec','Upper chest. Elbows slightly bent at peak.'],
+      ['Dips (BW or assisted)','3','10-12','BW or assisted','7','90 sec','Lean forward for chest. Straight torso for triceps.'],
+      ['Tricep Rope Pushdown','3','15','Light-moderate','7','60 sec','Higher reps today. Pump focus.'],
+      ['Band Pull-Apart','2','20','Band','6','45 sec','Shoulder prehab. NEVER skip on push days.'],
+    ]},
+  { day:'Friday',    type:'pull', badge:'Pull B',         badgeClass:'pull-badge', exercises: 6,
+    second:'Trail run — push the pace more today. Strongest trail run day. 30-50 min.',
+    warmup:'5 min bike → Cat-cow 10 reps → Dead hangs 3×20 sec → Band face pulls 2×15 → Light lat pulldown 1×12',
+    exList:[
+      ['Weighted Pull-Up / Lat Pulldown','4','6-8','BW+ or heavy','7-8','3 min','Add weight when 8 reps feels below RPE 7.'],
+      ['Pendlay Row (barbell)','3','8','Moderate-heavy','7','2-3 min','Dead stop each rep. Explosive pull.'],
+      ['Single Arm Cable Row','3','12/arm','Moderate','7','90 sec','Full rotation at top for thoracic mobility.'],
+      ['Rear Delt Fly (DB/cable)','3','15','Light','7','60 sec','Critical for shoulder balance. Keep it light.'],
+      ['EZ Bar Curl','3','10','Moderate','7','60 sec','Supinated grip. Full ROM. No swinging.'],
+      ['Incline DB Curl','2','12','Light','7','60 sec','Stretch focus. Elbows behind body.'],
+    ]},
+  { day:'Saturday',  type:'legs', badge:'Legs B',         badgeClass:'legs-badge', exercises: 6,
+    second:'Stationary bike — 20 min easy ONLY. Recovery spin. Keep it conversational.',
+    warmup:'5 min bike → Hip circles 10 each → Leg swings 10/leg → BW squat 2×15 → Empty bar squat 2×8 → 50% ×6 → 75% ×3',
+    exList:[
+      ['Back Squat','4','6','+5 lbs vs Wed','7-8','3-4 min','5 lbs heavier than Wednesday. Harder squat day.'],
+      ['Hack Squat / Goblet Squat','3','10','Moderate','7','2 min','Quad emphasis. Torso upright. Controlled descent.'],
+      ['Bulgarian Split Squat (DB)','3','8/leg','Moderate','7-8','90 sec/leg','Rear foot on bench. Full depth. Most demanding.'],
+      ['Leg Extension (machine)','3','15','Light-moderate','7','60 sec','Squeeze hard at top. Very slow negative.'],
+      ['Nordic Curl / Leg Curl','3','8','BW or light','7','90 sec','Nordic if available — extreme hamstring builder.'],
+      ['Calf Raise','3','20','Light-moderate','7','60 sec','Higher reps today. Full ROM mandatory.'],
+    ]},
+  { day:'Sunday',    type:'rest', badge:'Active recovery', badgeClass:'rest-badge', exercises: 0,
+    second:'Trail hike or long easy walk 45-90 min. Mobility: hip flexors, hamstrings, thoracic spine.',
+    warmup:'', exList:[] },
+];
+
+let curWeek = 1;
+const checked = {};
+
+function getWeekDays(wk) {
+  if (wk === 9) {
+    return DAYS_B1.map(d => {
+      if (d.type === 'rest') return d;
+      return { ...d, exList: d.exList.slice(0,3).map(e => [...e.slice(0,5), e[5], 'DELOAD: 40% lighter, half the sets']) };
+    });
+  }
+  if (wk >= 10) {
+    return DAYS_B1.map(d => {
+      if (d.type === 'rest') return d;
+      return { ...d, exList: d.exList.map(e => {
+        const rpe = e[4] === '7' ? '8' : e[4] === '7-8' ? '8-9' : e[4] === '6-7' ? '7' : e[4];
+        return [e[0], e[1], e[2], e[3], rpe, e[5], e[6]];
+      })};
+    });
+  }
+  return DAYS_B1;
+}
+
+function renderWeek(wk) {
+  const info = WEEKS[wk];
+  document.getElementById('wk-label').textContent = `Week ${wk}`;
+  const badge = document.getElementById('blk-badge');
+  badge.className = 'block-badge ' + info.badge;
+  badge.textContent = info.label;
+  document.getElementById('wk-note').innerHTML = info.note;
+  document.getElementById('btn-prev').disabled = wk <= 1;
+  document.getElementById('btn-next').disabled = wk >= 16;
+
+  const grid = document.getElementById('day-grid');
+  grid.innerHTML = '';
+  const days = getWeekDays(wk);
+
+  days.forEach((d, i) => {
+    const key = `${wk}-${i}`;
+    const isChecked = !!checked[key];
+    const isOpen = false;
+
+    const card = document.createElement('div');
+    card.className = 'day-card' + (isChecked ? ' done' : '');
+    card.id = `card-${i}`;
+
+    let bodyHtml = '';
+    if (d.type === 'rest') {
+      bodyHtml = `<div class="rest-body"><strong>Rest & recovery day.</strong><br>Trail hike or long easy walk 45-90 min.<br>Mobility: hip flexors, hamstrings, thoracic spine 10-15 min.<br>Foam roll if available.</div>`;
+    } else {
+      const warmupHtml = d.warmup ? `<div class="warmup-bar"><span>Warmup</span>${d.warmup}</div>` : '';
+      const exRows = d.exList.map((e, ei) => `
+        <tr>
+          <td class="ex-num">${ei+1}</td>
+          <td class="ex-name">${e[0]}</td>
+          <td class="ex-sets">${e[1]}</td>
+          <td class="ex-reps">${e[2]}</td>
+          <td class="ex-load">${e[3]}</td>
+          <td><span class="rpe-chip">${e[4]}</span></td>
+          <td class="ex-rest">${e[5]}</td>
+          <td class="ex-note">${e[6]}</td>
+        </tr>`).join('');
+      bodyHtml = `
+        ${warmupHtml}
+        <table class="ex-table">
+          <thead><tr>
+            <th>#</th><th>Exercise</th><th>Sets</th><th>Reps</th>
+            <th>Load</th><th>RPE</th><th>Rest</th><th>Note</th>
+          </tr></thead>
+          <tbody>${exRows}</tbody>
+        </table>
+        <div class="second-workout">
+          <div class="second-label">2nd workout</div>
+          <div class="second-text">${d.second}</div>
+        </div>`;
+    }
+
+    const exMeta = d.exercises > 0 ? `${d.exercises} exercises` : '';
+
+    card.innerHTML = `
+      <div class="day-header" onclick="toggleDay(${i})">
+        <span class="day-badge ${d.badgeClass}">${d.badge}</span>
+        <span class="day-name">${d.day}</span>
+        <span class="day-meta">${exMeta}</span>
+        <div class="day-check ${isChecked ? 'checked' : ''}" id="chk-${i}"
+          onclick="event.stopPropagation(); toggleCheck(${i}, ${wk})"></div>
+        <span class="chevron" id="chev-${i}">▼</span>
+      </div>
+      <div class="day-body" id="body-${i}">${bodyHtml}</div>`;
+
+    grid.appendChild(card);
+  });
+}
+
+function toggleDay(i) {
+  const body = document.getElementById(`body-${i}`);
+  const chev = document.getElementById(`chev-${i}`);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+}
+
+function toggleCheck(i, wk) {
+  const key = `${wk}-${i}`;
+  checked[key] = !checked[key];
+  const chk = document.getElementById(`chk-${i}`);
+  const card = document.getElementById(`card-${i}`);
+  chk.classList.toggle('checked', checked[key]);
+  card.classList.toggle('done', checked[key]);
+}
+
+function changeWeek(dir) {
+  curWeek = Math.max(1, Math.min(16, curWeek + dir));
+  renderWeek(curWeek);
+}
+
+function switchTab(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+renderWeek(1);
+</script>
+</body>
+</html>
